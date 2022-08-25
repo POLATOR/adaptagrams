@@ -8,7 +8,7 @@ option(NUDGE_DEBUG "Debug nudging" OFF)
 option(ESTIMATED_COST_DEBUG "Debug estimated cost" OFF)
 option(ASTAR_DEBUG "Debug ASTAR" OFF)
 
-add_library(${PROJECT_NAME}
+set(${PROJECT_NAME}_SOURCES 
     actioninfo.cpp
     connectionpin.cpp
     connector.cpp
@@ -32,6 +32,20 @@ add_library(${PROJECT_NAME}
     viscluster.cpp
     visibility.cpp
     vpsc.cpp
+    dllexport.h
+    )
+
+add_library(
+${PROJECT_NAME}
+SHARED
+${${PROJECT_NAME}_SOURCES}
+
+)
+
+target_compile_definitions(
+${PROJECT_NAME}
+PRIVATE
+LIBAVOID_EXPORTS
 )
 
 if (LIBAVOID_DEBUG)
@@ -55,6 +69,9 @@ if (ASTAR_DEBUG)
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../)
+
+install_target(TARGET ${PROJECT_NAME} )
+
 
 if (ENABLE_TESTS)
     set(TEST_CASES
@@ -187,3 +204,4 @@ if (ENABLE_TESTS)
         gtest_discover_tests(${FULL_TARGET_NAME})
     endforeach()
 endif()
+

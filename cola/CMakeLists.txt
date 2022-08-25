@@ -20,6 +20,10 @@ if (ENABLE_TESTS)
     include(GoogleTest)
 endif()
 
+option(COLA_INSTALL OFF)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(InstallTarget)
+
 add_subdirectory(libavoid)
 add_subdirectory(libcola)
 add_subdirectory(libtopology)
