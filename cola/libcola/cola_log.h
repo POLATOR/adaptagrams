@@ -162,7 +162,7 @@ class FILELOG_DECLSPEC FILELog : public Log<Output2FILE> {};
     else cola::FILELog().Get(level)
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
-
+#define NOMINMAX
 #include <windows.h>
 
 inline std::string NowTime()

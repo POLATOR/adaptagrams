@@ -1590,6 +1590,7 @@ ProjectionResult projectOntoCCs(Dim dim, Rectangles &rs, CompoundConstraints ccs
 
 ProjectionResult solve(Variables &vs, Constraints &cs, Rectangles &rs, unsigned debugLevel)
 {
+    using vpsc::Rectangle;
     int result = 0;
     IncSolver solv(vs,cs);
     try {

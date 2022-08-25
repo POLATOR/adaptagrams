@@ -744,18 +744,18 @@ void Tree::addNetwork(Graph &G, NodesById &treeNodes, EdgesById &treeEdges) {
     }
 }
 
-void Tree::addConstraints(Graph &G, bool alignRoot) {
+void Tree::addConstraints(Graph& G, bool alignRoot) {
 
     // Prepare functions and constants based on our growth direction.
     bool isVertical = Compass::isVerticalCard(m_growthDir);
     // Function to compare Nodes by their transverse coordinate:
     std::function<bool(Node_SP, Node_SP)> transCoordCmp = isVertical ?
-                [](const Node_SP &a, const Node_SP &b)->bool{ return a->getCentre().x < b->getCentre().x; } :
-                [](const Node_SP &a, const Node_SP &b)->bool{ return a->getCentre().y < b->getCentre().y; } ;
+        std::function<bool(Node_SP, Node_SP)>{[](const Node_SP& a, const Node_SP& b)->bool { return a->getCentre().x < b->getCentre().x; }} :
+        std::function<bool(Node_SP, Node_SP)>{ [](const Node_SP& a, const Node_SP& b)->bool { return a->getCentre().y < b->getCentre().y; } };
     // Funciton to compare Nodes by their axial dimension:
     std::function<bool(Node_SP, Node_SP)> axialMeasureCmp = isVertical ?
-                [](const Node_SP &a, const Node_SP &b)->bool{ return a->getDimensions().second < b->getDimensions().second; } :
-                [](const Node_SP &a, const Node_SP &b)->bool{ return a->getDimensions().first < b->getDimensions().first; } ;
+        std::function<bool(Node_SP, Node_SP)>{[](const Node_SP& a, const Node_SP& b)->bool { return a->getDimensions().second < b->getDimensions().second; }} :
+        std::function<bool(Node_SP, Node_SP)>{[](const Node_SP& a, const Node_SP& b)->bool { return a->getDimensions().first < b->getDimensions().first; }};
     // The direction in which to separate Nodes belonging to a common rank:
     CardinalDir intraRankSepDir = isVertical ? CardinalDir::EAST : CardinalDir::SOUTH;
     // The direction in which to separate Nodes belonging to neighbouring ranks:
@@ -817,41 +817,41 @@ void Tree::addConstraints(Graph &G, bool alignRoot) {
     }
 }
 
-void Tree::addBufferNodesAndConstraints(Graph &G, NodesById &bufferNodes) {
-    SepMatrix &matrix = G.getSepMatrix();
+void Tree::addBufferNodesAndConstraints(Graph& G, NodesById& bufferNodes) {
+    SepMatrix& matrix = G.getSepMatrix();
     // We need a function to take a new buffer node bn, and a neighbour of that node nbr, and (a) add bn to Graph G,
     // (b) add bn to our running lookup of bufferNodes, and (c) set a fixed relative constraint between bn and nbr.
-    std::function<void(Node_SP&, Node_SP&)> addBufferNode = [&bufferNodes, &G, &matrix](Node_SP &bn, Node_SP &nbr)->void{
+    std::function<void(Node_SP&, Node_SP&)> addBufferNode = [&bufferNodes, &G, &matrix](Node_SP& bn, Node_SP& nbr)->void {
         G.addNode(bn);
         id_type bnID = bn->id(),
-                nbrID = nbr->id();
-        bufferNodes.insert({bnID, bn});
+            nbrID = nbr->id();
+        bufferNodes.insert({ bnID, bn });
         Point c0 = bn->getCentre(),
-              c1 = nbr->getCentre();
+            c1 = nbr->getCentre();
         double dx = c1.x - c0.x,
-               dy = c1.y - c0.y;
+            dy = c1.y - c0.y;
         matrix.addFixedRelativeSep(bnID, nbrID, dx, dy);
     };
     // Set pad amount.
-    double pad = G.getIEL()/4.0;
+    double pad = G.getIEL() / 4.0;
     // Pads on "top" of leaves (picturing NORTH growth):
     auto it = m_nodes.begin();
     auto jt = m_leafIDs.begin();
     while (it != m_nodes.end() && jt != m_leafIDs.end()) {
         auto p = *it;
         id_type i = p.first,
-                j = *jt;
+            j = *jt;
         if (i > j) ++jt;
         else {
-            if (i==j) {
+            if (i == j) {
                 Node_SP leaf = p.second;
                 BoundingBox b = leaf->getBoundingBox();
                 Node_SP bn = Node::allocate();
-                switch(m_growthDir) {
-                    case CardinalDir::EAST: bn->setBoundingBox(b.X, b.X + pad, b.y, b.Y); break;
-                    case CardinalDir::SOUTH: bn->setBoundingBox(b.x, b.X, b.Y, b.Y + pad); break;
-                    case CardinalDir::WEST: bn->setBoundingBox(b.x - pad, b.x, b.y, b.Y); break;
-                    case CardinalDir::NORTH: bn->setBoundingBox(b.x, b.X, b.y - pad, b.y); break;
+                switch (m_growthDir) {
+                case CardinalDir::EAST: bn->setBoundingBox(b.X, b.X + pad, b.y, b.Y); break;
+                case CardinalDir::SOUTH: bn->setBoundingBox(b.x, b.X, b.Y, b.Y + pad); break;
+                case CardinalDir::WEST: bn->setBoundingBox(b.x - pad, b.x, b.y, b.Y); break;
+                case CardinalDir::NORTH: bn->setBoundingBox(b.x, b.X, b.y - pad, b.y); break;
                 }
                 addBufferNode(bn, leaf);
             }
@@ -862,8 +862,8 @@ void Tree::addBufferNodesAndConstraints(Graph &G, NodesById &bufferNodes) {
     bool isVertical = Compass::isVerticalCard(m_growthDir);
     // Function to compare Nodes by their transverse coordinate:
     std::function<bool(Node_SP, Node_SP)> transCoordCmp = isVertical ?
-                [](const Node_SP &a, const Node_SP &b)->bool{ return a->getCentre().x < b->getCentre().x; } :
-                [](const Node_SP &a, const Node_SP &b)->bool{ return a->getCentre().y < b->getCentre().y; } ;
+        std::function<bool(Node_SP, Node_SP)>{[](const Node_SP& a, const Node_SP& b)->bool { return a->getCentre().x < b->getCentre().x; }} :
+        std::function<bool(Node_SP, Node_SP)>{[](const Node_SP& a, const Node_SP& b)->bool { return a->getCentre().y < b->getCentre().y; }};
     for (auto it = std::next(m_nodesByRank.begin()); it != m_nodesByRank.end(); ++it) {
         Nodes rank = *it;
         std::sort(rank.begin(), rank.end(), transCoordCmp);

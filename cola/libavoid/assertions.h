@@ -37,10 +37,9 @@
     // Compiling with Microsoft Visual C++ compiler
 
     // Prevent inclusion of min and max macros.
-    #define NOMINMAX
-
-    #include <afx.h>
-    #define COLA_ASSERT(expr) ASSERT(expr)
+    #define NOMINMAX    
+    #include <cassert>
+    #define COLA_ASSERT(expr) assert(expr)
 
   #elif defined(USE_ASSERT_EXCEPTIONS)
 

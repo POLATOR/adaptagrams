@@ -208,6 +208,7 @@ void SepPair::addSep(GapType gt, SepDir sd, SepType st, double gap) {
 
 void SepPair::transform(SepTransform tf) {
     double g;
+    using std::swap;
     switch(tf) {
         case SepTransform::ROTATE90CW:
             // Swap x- and y-types.

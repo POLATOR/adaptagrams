@@ -19,6 +19,11 @@
 */
 
 #include <utility>
+#ifdef _MSC_VER
+#define _USE_MATH_DEFINES
+#include <cmath>
+#endif // _MSVC
+
 
 #include "libvpsc/rectangle.h"
 #include "libvpsc/constraint.h"
