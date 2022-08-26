@@ -13,7 +13,7 @@ function(install_target)
             EXPORT adaptagramsTargets      
             RUNTIME DESTINATION bin
             ARCHIVE DESTINATION lib
-            PUBLIC_HEADER DESTINATION include/adaptagrams/${INSTALL_TARGET_TARGET}
+            PUBLIC_HEADER DESTINATION include/adaptagrams/lib${INSTALL_TARGET_TARGET}
         )
 
         export(
