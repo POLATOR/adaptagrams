@@ -7,17 +7,13 @@ function(install_target)
     if(ADAPTAGRAMS_INSTALL)
         get_property(files TARGET  ${INSTALL_TARGET_TARGET} PROPERTY PUBLIC_HEADER)
         
-        install(FILES 
-            ${files}
-        DESTINATION
-            include/adaptagrams/${INSTALL_TARGET_TARGET}
-        )
 
         install(
             TARGETS ${INSTALL_TARGET_TARGET} 
             EXPORT adaptagramsTargets      
             RUNTIME DESTINATION bin
             ARCHIVE DESTINATION lib
+            PUBLIC_HEADER DESTINATION include/adaptagrams/${INSTALL_TARGET_TARGET}
         )
 
         export(
