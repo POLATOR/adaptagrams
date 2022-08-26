@@ -62,6 +62,7 @@ lib*/lib*.pc
 
 adaptagrams*
 !adaptagrams.i
+!adaptagramsConfig.cmake.in
 
 swig-worked
 test-driver
