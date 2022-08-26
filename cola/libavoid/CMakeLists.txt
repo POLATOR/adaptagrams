@@ -32,14 +32,57 @@ set(${PROJECT_NAME}_SOURCES
     viscluster.cpp
     visibility.cpp
     vpsc.cpp
+
+)
+
+set(${PROJECT_NAME}_HEADERS 
+    geomtypes.h
     dllexport.h
-    )
+    assertions.h
+    vpsc.h
+    visibility.h
+    vertices.h
+    viscluster.h
+    timer.h
+    shape.h
+    router.h
+    scanline.h
+    orthogonal.h
+    mtst.h
+    obstacle.h
+    makepath.h
+    libavoid.h
+    hyperedgetree.h
+    junction.h
+    hyperedgeimprover.h
+    hyperedge.h
+    graph.h
+    geometry.h
+    connector.h
+    connectionpin.h
+    actioninfo.h
+    debughandler.h
+    connend.h
+    debug.h
+)
 
 add_library(
 ${PROJECT_NAME}
 SHARED
-${${PROJECT_NAME}_SOURCES}
+)
 
+target_sources(${PROJECT_NAME}
+PRIVATE
+"$<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCES}>"
+PUBLIC
+"$<BUILD_INTERFACE:${${PROJECT_NAME}_HEADERS}>"
+"$<INSTALL_INTERFACE:include/adaptagrams>"
+)
+
+set_property(
+TARGET ${PROJECT_NAME} 
+PROPERTY PUBLIC_HEADER 
+${${PROJECT_NAME}_HEADERS} 
 )
 
 target_compile_definitions(
@@ -47,6 +90,17 @@ ${PROJECT_NAME}
 PRIVATE
 LIBAVOID_EXPORTS
 )
+
+target_include_directories(${PROJECT_NAME} 
+ PRIVATE   
+ $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> 
+ PUBLIC  
+ $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>
+ $<INSTALL_INTERFACE:include/adaptagrams>
+)
+
+
+install_target(TARGET ${PROJECT_NAME} FILES ${${PROJECT_NAME}_HEADERS})
 
 if (LIBAVOID_DEBUG)
     add_definitions(-DLIBAVOID_DEBUG)
@@ -67,10 +121,6 @@ endif()
 if (ASTAR_DEBUG)
     add_definitions(-DASTAR_DEBUG)
 endif()
-
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../)
-
-install_target(TARGET ${PROJECT_NAME} )
 
 
 if (ENABLE_TESTS)

@@ -69,3 +69,9 @@ test-driver
 # CLion dirs
 cmake-build-*
 .idea/
+
+# VisualStudio dirs
+.vs
+.out
+.output
+CMakeSettings.json
