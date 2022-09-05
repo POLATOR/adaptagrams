@@ -34,6 +34,7 @@
 #include <utility>
 
 #include "libavoid/geomtypes.h"
+#include "libavoid/dllexport.h"
 
 namespace Avoid {
 
@@ -48,7 +49,7 @@ typedef unsigned int ConnDirFlags;
 typedef unsigned short VertIDProps;
 
 
-class VertID
+class AVOID_EXPORT VertID
 {
     public:
         unsigned int objID;
@@ -112,7 +113,7 @@ static const VertID dummyOrthogShapeID(0, 0, VertID::PROP_OrthShapeEdge);
 
 class ANode;
 
-class VertInf
+class AVOID_EXPORT VertInf
 {
     public:
         VertInf(Router *router, const VertID& vid, const Point& vpoint,
@@ -191,7 +192,7 @@ bool directVis(VertInf *src, VertInf *dst);
 // Dummy vertices inserted for orthogonal routing are classed as shape
 // vertices but have VertID(0, 0).
 //
-class VertInfList
+class AVOID_EXPORT VertInfList
 {
     public:
         VertInfList();
